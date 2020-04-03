@@ -135,7 +135,7 @@ steps:
     echo "Bootstrapping with '$bootstrap_args'"
     $BUILD_REPOSITORY_LOCALPATH/bootstrap $bootstrap_args
 
-    make -j4
+    make -j4 VERBOSE=1
     make examples -j4
     make -C tiledb install
 

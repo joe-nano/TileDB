@@ -34,8 +34,8 @@
 
 #include <sstream>
 #include <unordered_set>
+#include <google/cloud/status.h>
 
-#include "google/cloud/status.h"
 #include "tiledb/sm/filesystem/gcs.h"
 #include "tiledb/sm/misc/logger.h"
 #include "tiledb/sm/misc/utils.h"

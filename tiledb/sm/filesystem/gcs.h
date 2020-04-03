@@ -35,7 +35,8 @@
 
 #ifdef HAVE_GCS
 
-#include "google/cloud/storage/client.h"
+#include <google/cloud/storage/client.h>
+
 #include "tiledb/sm/buffer/buffer.h"
 #include "tiledb/sm/config/config.h"
 #include "tiledb/sm/misc/constants.h"

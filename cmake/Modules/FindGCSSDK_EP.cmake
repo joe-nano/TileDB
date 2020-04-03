@@ -36,15 +36,48 @@ include(TileDBCommon)
 # modules.
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "${TILEDB_EP_INSTALL_PREFIX}")
 
-if (TILEDB_SUPERBUILD)
-  if (NOT TILEDB_FORCE_ALL_DEPS)
-    find_package(storage_client CONFIG QUIET)
-  endif()
+# Try searching for the SDK in the EP prefix.
+set(GCSSDK_DIR "${TILEDB_EP_INSTALL_PREFIX}")
+
+# First check for a static version in the EP prefix.
+find_library(GCSSDK_LIBRARY
+  NAMES
+    libstorage_client${CMAKE_STATIC_LIBRARY_SUFFIX}
+  PATHS ${TILEDB_EP_INSTALL_PREFIX}
+  PATH_SUFFIXES lib
+  NO_DEFAULT_PATH
+)
+
+if (GCSSDK_LIBRARY)
+  set(GCSSDK_STATIC_EP_FOUND TRUE)
+  find_path(GCSSDK_INCLUDE_DIR
+    NAMES client.h
+    PATHS ${TILEDB_EP_INSTALL_PREFIX}
+    PATH_SUFFIXES include/google/cloud/storage
+    NO_DEFAULT_PATH
+  )
 else()
-  find_package(storage_client CONFIG QUIET)
+  set(GCSSDK_STATIC_EP_FOUND FALSE)
+  # Static EP not found, search in system paths.
+  find_library(GCSSDK_LIBRARY
+    NAMES
+      libstorage_client
+    PATH_SUFFIXES lib bin
+    ${TILEDB_DEPS_NO_DEFAULT_PATH}
+  )
+  find_path(GCSSDK_INCLUDE_DIR
+    NAMES client.h
+    PATH_SUFFIXES include/google/cloud/storage
+    ${TILEDB_DEPS_NO_DEFAULT_PATH}
+  )
 endif()
 
-if (NOT storage_client_FOUND)
+include(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(GCSSDK
+  REQUIRED_VARS GCSSDK_LIBRARY GCSSDK_INCLUDE_DIR
+)
+
+if (NOT GCSSDK_FOUND)
   if (TILEDB_SUPERBUILD)
     message(STATUS "Could NOT find GCSSDK")
     message(STATUS "Adding GCSSDK as an external project")
@@ -78,6 +111,7 @@ if (NOT storage_client_FOUND)
         -DBUILD_SHARED_LIBS=OFF
         -DBUILD_SAMPLES=OFF
         -DCMAKE_PREFIX_PATH=${TILEDB_EP_INSTALL_PREFIX}
+        -DOPENSSL_ROOT_DIR=${TILEDB_OPENSSL_DIR}
       BUILD_COMMAND cmake --build cmake-out -- -j${NCPU}
       INSTALL_COMMAND
           cp -r ${TILEDB_EP_SOURCE_DIR}/ep_gcssdk/cmake-out/external/lib ${TILEDB_EP_INSTALL_PREFIX}
@@ -99,7 +133,7 @@ if (NOT storage_client_FOUND)
   endif()
 endif()
 
-if (storage_client_FOUND)
+if (GCSSDK_FOUND)
   # Build a list of all GCS libraries to link with.
   list(APPEND GCSSDK_LINKED_LIBS "storage_client"
                                  "google_cloud_cpp_common"
@@ -118,12 +152,12 @@ if (storage_client_FOUND)
       add_library(GCSSDK::${LIB} UNKNOWN IMPORTED)
       set_target_properties(GCSSDK::${LIB} PROPERTIES
         IMPORTED_LOCATION "${GCS_FOUND_${LIB}}"
-        INTERFACE_INCLUDE_DIRECTORIES "${GCSSDK_INCLUDE_DIR}"
+        INTERFACE_INCLUDE_DIRECTORIES ${TILEDB_EP_INSTALL_PREFIX}/include
       )
     endif()
 
     # If we built a static EP, install it if required.
-    if (TILEDB_GCSSDK_EP_BUILT AND TILEDB_INSTALL_STATIC_DEPS)
+    if (GCSSDK_STATIC_EP_FOUND AND TILEDB_INSTALL_STATIC_DEPS)
       install_target_libs(GCSSDK::${LIB})
     endif()
 
