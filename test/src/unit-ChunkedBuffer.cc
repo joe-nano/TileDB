@@ -38,22 +38,31 @@
 using namespace tiledb::sm;
 
 TEST_CASE(
-    "ChunkedBuffer: Test default constructor",
-    "[ChunkedBuffer][default_constructor]") {
-  // Test the default constructor and verify the empty state.
-  ChunkedBuffer chunked_buffer;
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == 0);
-  void* buffer = nullptr;
-  CHECK(!chunked_buffer.internal_buffer(0, &buffer).ok());
-  CHECK(!buffer);
+    "ChunkedBuffer: Test discrete, fixed size IO 1",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
 }
 
 TEST_CASE(
-    "ChunkedBuffer: Test discrete, fixed size IO",
+    "ChunkedBuffer: Test discrete, fixed size IO 2",
     "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
   // Instantiate a test ChunkedBuffer.
   ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 3",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
 
   // Create a buffer to write to the test ChunkedBuffer.
   const int64_t buffer_size = 1024 * 1024 * 3;
@@ -63,711 +72,1046 @@ TEST_CASE(
     write_buffer[i] = i;
   }
 
+  std::cerr << "JOE 3" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 4",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  REQUIRE(write_buffer);
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
   // Attempt a write before initializing the test ChunkedBuffer.
   uint64_t write_offset = 0;
-  CHECK(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4 * " << chunked_buffer.size() << std::endl;
+  std::cerr << "JOE 4 ** " << chunked_buffer.capacity() << std::endl;
+  std::cerr << "JOE 4 *** " << chunked_buffer.nchunks() << std::endl;
+  std::cerr << "JOE 4 **** " << buffer_len << std::endl;
+
+  uint64_t read_buffer[buffer_len];
+  std::cerr << "JOE 4 ***** " << sizeof(read_buffer) << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 4.1",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1.1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const uint64_t buffer_size = 1024 * 1024 * 3;
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+
+  std::cerr << "JOE 3" << std::endl;
+
+  std::cerr << "JOE 4 * " << chunked_buffer.size() << std::endl;
+  std::cerr << "JOE 4 ** " << chunked_buffer.capacity() << std::endl;
+  std::cerr << "JOE 4 *** " << chunked_buffer.nchunks() << std::endl;
+  std::cerr << "JOE 4 **** " << buffer_len << std::endl;
+
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(&read_buffer[0], buffer_size, read_offset).ok());
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 5",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const uint64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << chunked_buffer.size() << std::endl;
+
+  // TODO crashes here
 
   // Attempt a read before initializing the test ChunkedBuffer.
   uint64_t read_offset = 0;
   uint64_t read_buffer[buffer_len];
-  CHECK(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 6",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
 
   // Attempt an alloc before initializing the test ChunkedBuffer.
   size_t chunk_idx = 0;
   void* chunk_buffer = nullptr;
-  CHECK(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
-  CHECK(!chunk_buffer);
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 7",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+
+  // Attempt an alloc before initializing the test ChunkedBuffer.
+  size_t chunk_idx = 0;
+  void* chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
 
   // Attempt a set before initializing the test ChunkedBuffer.
   chunk_buffer = nullptr;
-  CHECK(!chunked_buffer.set_contigious(chunk_buffer).ok());
-  CHECK(!chunk_buffer);
+  REQUIRE(!chunked_buffer.set_contigious(chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 7" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 8",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+
+  // Attempt an alloc before initializing the test ChunkedBuffer.
+  size_t chunk_idx = 0;
+  void* chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
+
+  // Attempt a set before initializing the test ChunkedBuffer.
+  chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.set_contigious(chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 7" << std::endl;
 
   // Initialize the ChunkedBuffer.
-  CHECK(buffer_size % sizeof(uint64_t) == 0);
+  REQUIRE(buffer_size % sizeof(uint64_t) == 0);
   const size_t chunk_size = 1024 * 100;
-  CHECK(buffer_size % chunk_size != 0);
+  REQUIRE(buffer_size % chunk_size != 0);
   const size_t nchunks = (buffer_size / chunk_size) + 1;
   const size_t last_chunk_size = buffer_size % chunk_size;
-  CHECK(chunk_size != last_chunk_size);
+  REQUIRE(chunk_size != last_chunk_size);
   chunked_buffer.init_fixed_size(
       ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
-  CHECK(chunked_buffer.capacity() == buffer_size);
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == nchunks);
+  REQUIRE(chunked_buffer.capacity() == buffer_size);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == nchunks);
+
+  std::cerr << "JOE 8" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 10",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+
+  // Attempt an alloc before initializing the test ChunkedBuffer.
+  size_t chunk_idx = 0;
+  void* chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
+
+  // Attempt a set before initializing the test ChunkedBuffer.
+  chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.set_contigious(chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 7" << std::endl;
+
+  // Initialize the ChunkedBuffer.
+  REQUIRE(buffer_size % sizeof(uint64_t) == 0);
+  const size_t chunk_size = 1024 * 100;
+  REQUIRE(buffer_size % chunk_size != 0);
+  const size_t nchunks = (buffer_size / chunk_size) + 1;
+  const size_t last_chunk_size = buffer_size % chunk_size;
+  REQUIRE(chunk_size != last_chunk_size);
+  chunked_buffer.init_fixed_size(
+      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
+  REQUIRE(chunked_buffer.capacity() == buffer_size);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == nchunks);
+
+  std::cerr << "JOE 8" << std::endl;
 
   // Verify all chunks are unallocated.
   for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 9" << std::endl;
     void* chunk_buffer;
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(!chunk_buffer);
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(!chunk_buffer);
   }
+
+  std::cerr << "JOE 10" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 11",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+
+  // Attempt an alloc before initializing the test ChunkedBuffer.
+  size_t chunk_idx = 0;
+  void* chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
+
+  // Attempt a set before initializing the test ChunkedBuffer.
+  chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.set_contigious(chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 7" << std::endl;
+
+  // Initialize the ChunkedBuffer.
+  REQUIRE(buffer_size % sizeof(uint64_t) == 0);
+  const size_t chunk_size = 1024 * 100;
+  REQUIRE(buffer_size % chunk_size != 0);
+  const size_t nchunks = (buffer_size / chunk_size) + 1;
+  const size_t last_chunk_size = buffer_size % chunk_size;
+  REQUIRE(chunk_size != last_chunk_size);
+  chunked_buffer.init_fixed_size(
+      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
+  REQUIRE(chunked_buffer.capacity() == buffer_size);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == nchunks);
+
+  std::cerr << "JOE 8" << std::endl;
+
+  // Verify all chunks are unallocated.
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 9" << std::endl;
+    void* chunk_buffer;
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(!chunk_buffer);
+  }
+
+  std::cerr << "JOE 10" << std::endl;
 
   // Write the entire buffer. This will allocate all of the chunks.
   write_offset = 0;
-  CHECK(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+  REQUIRE(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 11" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 16",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+
+  // Attempt an alloc before initializing the test ChunkedBuffer.
+  size_t chunk_idx = 0;
+  void* chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
+
+  // Attempt a set before initializing the test ChunkedBuffer.
+  chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.set_contigious(chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 7" << std::endl;
+
+  // Initialize the ChunkedBuffer.
+  REQUIRE(buffer_size % sizeof(uint64_t) == 0);
+  const size_t chunk_size = 1024 * 100;
+  REQUIRE(buffer_size % chunk_size != 0);
+  const size_t nchunks = (buffer_size / chunk_size) + 1;
+  const size_t last_chunk_size = buffer_size % chunk_size;
+  REQUIRE(chunk_size != last_chunk_size);
+  chunked_buffer.init_fixed_size(
+      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
+  REQUIRE(chunked_buffer.capacity() == buffer_size);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == nchunks);
+
+  std::cerr << "JOE 8" << std::endl;
+
+  // Verify all chunks are unallocated.
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 9" << std::endl;
+    void* chunk_buffer;
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(!chunk_buffer);
+  }
+
+  std::cerr << "JOE 10" << std::endl;
+
+  // Write the entire buffer. This will allocate all of the chunks.
+  write_offset = 0;
+  REQUIRE(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 11" << std::endl;
 
   // Verify all chunks are allocated and that they do not overlap
   // 'buffer' because they have been deep-copied.
   for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 12" << std::endl;
     uint32_t internal_size = 0;
-    CHECK(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
+    REQUIRE(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
     if (i < chunked_buffer.nchunks() - 1) {
-      CHECK(internal_size == chunk_size);
+      REQUIRE(internal_size == chunk_size);
     } else {
-      CHECK(internal_size == last_chunk_size);
+      REQUIRE(internal_size == last_chunk_size);
     }
 
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(chunk_buffer);
-    CHECK(chunk_buffer != write_buffer);
+    std::cerr << "JOE 13" << std::endl;
+
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(chunk_buffer);
+    REQUIRE(chunk_buffer != write_buffer);
     if (chunk_buffer < write_buffer) {
-      CHECK(
+      std::cerr << "JOE 14" << std::endl;
+      REQUIRE(
           static_cast<char*>(chunk_buffer) + chunk_size <=
           reinterpret_cast<char*>(write_buffer));
     } else {
-      CHECK(
+      std::cerr << "JOE 15" << std::endl;
+      REQUIRE(
           reinterpret_cast<char*>(write_buffer) + buffer_size <=
           static_cast<char*>(chunk_buffer));
     }
   }
+  std::cerr << "JOE 16" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 17",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+
+  // Attempt an alloc before initializing the test ChunkedBuffer.
+  size_t chunk_idx = 0;
+  void* chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
+
+  // Attempt a set before initializing the test ChunkedBuffer.
+  chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.set_contigious(chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 7" << std::endl;
+
+  // Initialize the ChunkedBuffer.
+  REQUIRE(buffer_size % sizeof(uint64_t) == 0);
+  const size_t chunk_size = 1024 * 100;
+  REQUIRE(buffer_size % chunk_size != 0);
+  const size_t nchunks = (buffer_size / chunk_size) + 1;
+  const size_t last_chunk_size = buffer_size % chunk_size;
+  REQUIRE(chunk_size != last_chunk_size);
+  chunked_buffer.init_fixed_size(
+      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
+  REQUIRE(chunked_buffer.capacity() == buffer_size);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == nchunks);
+
+  std::cerr << "JOE 8" << std::endl;
+
+  // Verify all chunks are unallocated.
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 9" << std::endl;
+    void* chunk_buffer;
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(!chunk_buffer);
+  }
+
+  std::cerr << "JOE 10" << std::endl;
+
+  // Write the entire buffer. This will allocate all of the chunks.
+  write_offset = 0;
+  REQUIRE(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 11" << std::endl;
+
+  // Verify all chunks are allocated and that they do not overlap
+  // 'buffer' because they have been deep-copied.
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 12" << std::endl;
+    uint32_t internal_size = 0;
+    REQUIRE(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
+    if (i < chunked_buffer.nchunks() - 1) {
+      REQUIRE(internal_size == chunk_size);
+    } else {
+      REQUIRE(internal_size == last_chunk_size);
+    }
+
+    std::cerr << "JOE 13" << std::endl;
+
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(chunk_buffer);
+    REQUIRE(chunk_buffer != write_buffer);
+    if (chunk_buffer < write_buffer) {
+      std::cerr << "JOE 14" << std::endl;
+      REQUIRE(
+          static_cast<char*>(chunk_buffer) + chunk_size <=
+          reinterpret_cast<char*>(write_buffer));
+    } else {
+      std::cerr << "JOE 15" << std::endl;
+      REQUIRE(
+          reinterpret_cast<char*>(write_buffer) + buffer_size <=
+          static_cast<char*>(chunk_buffer));
+    }
+  }
+  std::cerr << "JOE 16" << std::endl;
   // Read the third element, this will be of value '2'.
   read_offset = 2 * sizeof(uint64_t);
   uint64_t two = 0;
-  CHECK(chunked_buffer.read(&two, sizeof(uint64_t), read_offset).ok());
-  CHECK(two == 2);
+  REQUIRE(chunked_buffer.read(&two, sizeof(uint64_t), read_offset).ok());
+  REQUIRE(two == 2);
+
+  std::cerr << "JOE 17" << std::endl;
+}
+
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 18",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
+
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
+
+  std::cerr << "JOE 2" << std::endl;
+
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
+
+  std::cerr << "JOE 3" << std::endl;
+
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+
+  // Attempt an alloc before initializing the test ChunkedBuffer.
+  size_t chunk_idx = 0;
+  void* chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
+
+  // Attempt a set before initializing the test ChunkedBuffer.
+  chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.set_contigious(chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 7" << std::endl;
+
+  // Initialize the ChunkedBuffer.
+  REQUIRE(buffer_size % sizeof(uint64_t) == 0);
+  const size_t chunk_size = 1024 * 100;
+  REQUIRE(buffer_size % chunk_size != 0);
+  const size_t nchunks = (buffer_size / chunk_size) + 1;
+  const size_t last_chunk_size = buffer_size % chunk_size;
+  REQUIRE(chunk_size != last_chunk_size);
+  chunked_buffer.init_fixed_size(
+      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
+  REQUIRE(chunked_buffer.capacity() == buffer_size);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == nchunks);
+
+  std::cerr << "JOE 8" << std::endl;
+
+  // Verify all chunks are unallocated.
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 9" << std::endl;
+    void* chunk_buffer;
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(!chunk_buffer);
+  }
+
+  std::cerr << "JOE 10" << std::endl;
+
+  // Write the entire buffer. This will allocate all of the chunks.
+  write_offset = 0;
+  REQUIRE(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 11" << std::endl;
+
+  // Verify all chunks are allocated and that they do not overlap
+  // 'buffer' because they have been deep-copied.
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 12" << std::endl;
+    uint32_t internal_size = 0;
+    REQUIRE(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
+    if (i < chunked_buffer.nchunks() - 1) {
+      REQUIRE(internal_size == chunk_size);
+    } else {
+      REQUIRE(internal_size == last_chunk_size);
+    }
+
+    std::cerr << "JOE 13" << std::endl;
+
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(chunk_buffer);
+    REQUIRE(chunk_buffer != write_buffer);
+    if (chunk_buffer < write_buffer) {
+      std::cerr << "JOE 14" << std::endl;
+      REQUIRE(
+          static_cast<char*>(chunk_buffer) + chunk_size <=
+          reinterpret_cast<char*>(write_buffer));
+    } else {
+      std::cerr << "JOE 15" << std::endl;
+      REQUIRE(
+          reinterpret_cast<char*>(write_buffer) + buffer_size <=
+          static_cast<char*>(chunk_buffer));
+    }
+  }
+  std::cerr << "JOE 16" << std::endl;
+  // Read the third element, this will be of value '2'.
+  read_offset = 2 * sizeof(uint64_t);
+  uint64_t two = 0;
+  REQUIRE(chunked_buffer.read(&two, sizeof(uint64_t), read_offset).ok());
+  REQUIRE(two == 2);
+
+  std::cerr << "JOE 17" << std::endl;
 
   // Read the 10th element, this will be of value '9'.
   read_offset = 9 * sizeof(uint64_t);
   uint64_t nine = 0;
-  CHECK(chunked_buffer.read(&nine, sizeof(uint64_t), read_offset).ok());
-  CHECK(nine == 9);
+  REQUIRE(chunked_buffer.read(&nine, sizeof(uint64_t), read_offset).ok());
+  REQUIRE(nine == 9);
 
-  // Read the 100th element, this will be of value '99'.
-  read_offset = 99 * sizeof(uint64_t);
-  uint64_t ninety_nine = 0;
-  CHECK(chunked_buffer.read(&ninety_nine, sizeof(uint64_t), read_offset).ok());
-  CHECK(ninety_nine == 99);
+  std::cerr << "JOE 18" << std::endl;
+}
 
-  // Overwrite the 100th element with value '900'.
-  write_offset = 99 * sizeof(uint64_t);
-  uint64_t nine_hundred = 900;
-  CHECK(
-      chunked_buffer.write(&nine_hundred, sizeof(uint64_t), write_offset).ok());
+TEST_CASE(
+    "ChunkedBuffer: Test discrete, fixed size IO 0",
+    "[ChunkedBuffer][discrete_fixed_io]") {
+  std::cerr << "JOE 1" << std::endl;
 
-  // Read the 100th element, this will be of value '900'.
-  read_offset = 99 * sizeof(uint64_t);
-  nine_hundred = 0;
-  CHECK(chunked_buffer.read(&nine_hundred, sizeof(uint64_t), read_offset).ok());
-  CHECK(nine_hundred == 900);
+  // Instantiate a test ChunkedBuffer.
+  ChunkedBuffer chunked_buffer;
 
-  // Overwrite the 100th element back to value '99'.
-  write_offset = 99 * sizeof(uint64_t);
-  ninety_nine = 99;
-  CHECK(
-      chunked_buffer.write(&ninety_nine, sizeof(uint64_t), write_offset).ok());
+  std::cerr << "JOE 2" << std::endl;
 
-  // Read the entire written buffer.
-  read_offset = 0;
-  CHECK(chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
-  CHECK(memcmp(read_buffer, write_buffer, buffer_size) == 0);
+  // Create a buffer to write to the test ChunkedBuffer.
+  const int64_t buffer_size = 1024 * 1024 * 3;
+  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
+  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
+  for (uint64_t i = 0; i < buffer_len; ++i) {
+    write_buffer[i] = i;
+  }
 
-  // Free the chunk buffer, which will free all of the allocated
-  // buffers and return chunked_buffer into an uninitialized state.
-  chunked_buffer.free();
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == 0);
+  std::cerr << "JOE 3" << std::endl;
 
-  // Reinitialize the chunk buffers.
+  // Attempt a write before initializing the test ChunkedBuffer.
+  uint64_t write_offset = 0;
+  REQUIRE(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 4" << std::endl;
+
+  // Attempt a read before initializing the test ChunkedBuffer.
+  uint64_t read_offset = 0;
+  uint64_t read_buffer[buffer_len];
+  REQUIRE(!chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+
+  std::cerr << "JOE 5" << std::endl;
+
+  // Attempt an alloc before initializing the test ChunkedBuffer.
+  size_t chunk_idx = 0;
+  void* chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.alloc_discrete(chunk_idx, &chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 6" << std::endl;
+
+  // Attempt a set before initializing the test ChunkedBuffer.
+  chunk_buffer = nullptr;
+  REQUIRE(!chunked_buffer.set_contigious(chunk_buffer).ok());
+  REQUIRE(!chunk_buffer);
+
+  std::cerr << "JOE 7" << std::endl;
+
+  // Initialize the ChunkedBuffer.
+  REQUIRE(buffer_size % sizeof(uint64_t) == 0);
+  const size_t chunk_size = 1024 * 100;
+  REQUIRE(buffer_size % chunk_size != 0);
+  const size_t nchunks = (buffer_size / chunk_size) + 1;
+  const size_t last_chunk_size = buffer_size % chunk_size;
+  REQUIRE(chunk_size != last_chunk_size);
   chunked_buffer.init_fixed_size(
       ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
-  CHECK(chunked_buffer.capacity() == buffer_size);
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == nchunks);
+  REQUIRE(chunked_buffer.capacity() == buffer_size);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == nchunks);
+
+  std::cerr << "JOE 8" << std::endl;
 
   // Verify all chunks are unallocated.
   for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
-    uint32_t internal_size = 0;
-    CHECK(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
-    CHECK(internal_size == 0);
-
-    uint32_t internal_capacity = 0;
-    CHECK(chunked_buffer.internal_buffer_capacity(i, &internal_capacity).ok());
-    if (i < chunked_buffer.nchunks() - 1) {
-      CHECK(internal_capacity == chunk_size);
-    } else {
-      CHECK(internal_capacity == last_chunk_size);
-    }
+    std::cerr << "JOE 9" << std::endl;
+    void* chunk_buffer;
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(!chunk_buffer);
   }
 
-  // Allocate all chunks.
-  std::vector<void*> internal_chunked_buffer(chunked_buffer.nchunks());
-  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
-    CHECK(chunked_buffer.alloc_discrete(i, &chunk_buffer).ok());
-    CHECK(chunk_buffer);
-    internal_chunked_buffer[i] = chunk_buffer;
-  }
+  std::cerr << "JOE 10" << std::endl;
+
+  // Write the entire buffer. This will allocate all of the chunks.
+  write_offset = 0;
+  REQUIRE(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 11" << std::endl;
 
   // Verify all chunks are allocated and that they do not overlap
   // 'buffer' because they have been deep-copied.
   for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 12" << std::endl;
     uint32_t internal_size = 0;
-    CHECK(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
-    CHECK(internal_size == 0);
-
-    uint32_t internal_capacity = 0;
-    CHECK(chunked_buffer.internal_buffer_capacity(i, &internal_capacity).ok());
+    REQUIRE(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
     if (i < chunked_buffer.nchunks() - 1) {
-      CHECK(internal_capacity == chunk_size);
+      REQUIRE(internal_size == chunk_size);
     } else {
-      CHECK(internal_capacity == last_chunk_size);
+      REQUIRE(internal_size == last_chunk_size);
     }
 
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(chunk_buffer);
-    CHECK(chunk_buffer != write_buffer);
+    std::cerr << "JOE 13" << std::endl;
+
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(chunk_buffer);
+    REQUIRE(chunk_buffer != write_buffer);
     if (chunk_buffer < write_buffer) {
-      CHECK(
+      std::cerr << "JOE 14" << std::endl;
+      REQUIRE(
           static_cast<char*>(chunk_buffer) + chunk_size <=
           reinterpret_cast<char*>(write_buffer));
     } else {
-      CHECK(
+      std::cerr << "JOE 15" << std::endl;
+      REQUIRE(
           reinterpret_cast<char*>(write_buffer) + buffer_size <=
           static_cast<char*>(chunk_buffer));
     }
   }
+  std::cerr << "JOE 16" << std::endl;
+  // Read the third element, this will be of value '2'.
+  read_offset = 2 * sizeof(uint64_t);
+  uint64_t two = 0;
+  REQUIRE(chunked_buffer.read(&two, sizeof(uint64_t), read_offset).ok());
+  REQUIRE(two == 2);
 
-  // Write to all chunks.
-  write_offset = 0;
-  CHECK(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+  std::cerr << "JOE 17" << std::endl;
+
+  // Read the 10th element, this will be of value '9'.
+  read_offset = 9 * sizeof(uint64_t);
+  uint64_t nine = 0;
+  REQUIRE(chunked_buffer.read(&nine, sizeof(uint64_t), read_offset).ok());
+  REQUIRE(nine == 9);
+
+  std::cerr << "JOE 18" << std::endl;
+
+  // Read the 100th element, this will be of value '99'.
+  read_offset = 99 * sizeof(uint64_t);
+  uint64_t ninety_nine = 0;
+  REQUIRE(
+      chunked_buffer.read(&ninety_nine, sizeof(uint64_t), read_offset).ok());
+  REQUIRE(ninety_nine == 99);
+
+  std::cerr << "JOE 19" << std::endl;
+
+  // Overwrite the 100th element with value '900'.
+  write_offset = 99 * sizeof(uint64_t);
+  uint64_t nine_hundred = 900;
+  REQUIRE(
+      chunked_buffer.write(&nine_hundred, sizeof(uint64_t), write_offset).ok());
+
+  std::cerr << "JOE 20" << std::endl;
+
+  // Read the 100th element, this will be of value '900'.
+  read_offset = 99 * sizeof(uint64_t);
+  nine_hundred = 0;
+  REQUIRE(
+      chunked_buffer.read(&nine_hundred, sizeof(uint64_t), read_offset).ok());
+  REQUIRE(nine_hundred == 900);
+
+  std::cerr << "JOE 21" << std::endl;
+
+  // Overwrite the 100th element back to value '99'.
+  write_offset = 99 * sizeof(uint64_t);
+  ninety_nine = 99;
+  REQUIRE(
+      chunked_buffer.write(&ninety_nine, sizeof(uint64_t), write_offset).ok());
+
+  std::cerr << "JOE 22" << std::endl;
 
   // Read the entire written buffer.
   read_offset = 0;
-  CHECK(chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
-  CHECK(memcmp(read_buffer, write_buffer, buffer_size) == 0);
+  REQUIRE(chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+  REQUIRE(memcmp(read_buffer, write_buffer, buffer_size) == 0);
+
+  std::cerr << "JOE 23" << std::endl;
+
+  // Free the chunk buffer, which will free all of the allocated
+  // buffers and return chunked_buffer into an uninitialized state.
+  chunked_buffer.free();
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == 0);
+
+  std::cerr << "JOE 24" << std::endl;
+
+  // Reinitialize the chunk buffers.
+  chunked_buffer.init_fixed_size(
+      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
+  REQUIRE(chunked_buffer.capacity() == buffer_size);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == nchunks);
+
+  std::cerr << "JOE 25" << std::endl;
+
+  // Verify all chunks are unallocated.
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 26" << std::endl;
+    uint32_t internal_size = 0;
+    REQUIRE(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
+    REQUIRE(internal_size == 0);
+
+    uint32_t internal_capacity = 0;
+    REQUIRE(
+        chunked_buffer.internal_buffer_capacity(i, &internal_capacity).ok());
+    std::cerr << "JOE 27" << std::endl;
+    if (i < chunked_buffer.nchunks() - 1) {
+      REQUIRE(internal_capacity == chunk_size);
+    } else {
+      REQUIRE(internal_capacity == last_chunk_size);
+    }
+  }
+
+  std::cerr << "JOE 28" << std::endl;
+
+  // Allocate all chunks.
+  std::vector<void*> internal_chunked_buffer(chunked_buffer.nchunks());
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    REQUIRE(chunked_buffer.alloc_discrete(i, &chunk_buffer).ok());
+    REQUIRE(chunk_buffer);
+    internal_chunked_buffer[i] = chunk_buffer;
+  }
+
+  std::cerr << "JOE 29" << std::endl;
+
+  // Verify all chunks are allocated and that they do not overlap
+  // 'buffer' because they have been deep-copied.
+  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
+    std::cerr << "JOE 30" << std::endl;
+    uint32_t internal_size = 0;
+    REQUIRE(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
+    REQUIRE(internal_size == 0);
+
+    std::cerr << "JOE 31" << std::endl;
+
+    uint32_t internal_capacity = 0;
+    REQUIRE(
+        chunked_buffer.internal_buffer_capacity(i, &internal_capacity).ok());
+    if (i < chunked_buffer.nchunks() - 1) {
+      REQUIRE(internal_capacity == chunk_size);
+    } else {
+      REQUIRE(internal_capacity == last_chunk_size);
+    }
+
+    std::cerr << "JOE 32" << std::endl;
+
+    REQUIRE(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
+    REQUIRE(chunk_buffer);
+    REQUIRE(chunk_buffer != write_buffer);
+    if (chunk_buffer < write_buffer) {
+      REQUIRE(
+          static_cast<char*>(chunk_buffer) + chunk_size <=
+          reinterpret_cast<char*>(write_buffer));
+    } else {
+      REQUIRE(
+          reinterpret_cast<char*>(write_buffer) + buffer_size <=
+          static_cast<char*>(chunk_buffer));
+    }
+
+    std::cerr << "JOE 33" << std::endl;
+  }
+
+  std::cerr << "JOE 34" << std::endl;
+
+  // Write to all chunks.
+  write_offset = 0;
+  REQUIRE(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
+
+  std::cerr << "JOE 35" << std::endl;
+
+  // Read the entire written buffer.
+  read_offset = 0;
+  REQUIRE(chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
+  REQUIRE(memcmp(read_buffer, write_buffer, buffer_size) == 0);
+
+  std::cerr << "JOE 36" << std::endl;
 
   // Clear the ChunkedBuffer. This will reset to an uninitialized state
   // but will NOT free the underlying buffers.
   chunked_buffer.clear();
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == 0);
+  REQUIRE(chunked_buffer.size() == 0);
+  REQUIRE(chunked_buffer.nchunks() == 0);
+
+  std::cerr << "JOE 37" << std::endl;
 
   // Free the internal buffers to prevent a memory leak.
   for (const auto& internal_buffer : internal_chunked_buffer) {
     free(internal_buffer);
   }
-}
 
-TEST_CASE(
-    "ChunkedBuffer: Test contigious, fixed size IO",
-    "[ChunkedBuffer][contigious_fixed_io]") {
-  // Instantiate a test ChunkedBuffer.
-  ChunkedBuffer chunked_buffer;
-
-  // Create a buffer to write to the test ChunkedBuffer.
-  const int64_t buffer_size = 1024 * 1024 * 3;
-  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
-  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
-  for (uint64_t i = 0; i < buffer_len; ++i) {
-    write_buffer[i] = i;
-  }
-
-  // Initialize the ChunkedBuffer.
-  CHECK(buffer_size % sizeof(uint64_t) == 0);
-  const size_t chunk_size = 1024 * 100;
-  CHECK(buffer_size % chunk_size != 0);
-  const size_t nchunks = (buffer_size / chunk_size) + 1;
-  const size_t last_chunk_size = buffer_size % chunk_size;
-  CHECK(chunk_size != last_chunk_size);
-  chunked_buffer.init_fixed_size(
-      ChunkedBuffer::BufferAddressing::CONTIGIOUS, buffer_size, chunk_size);
-  CHECK(chunked_buffer.capacity() == buffer_size);
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == nchunks);
-
-  // Verify all chunks are unallocated.
-  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
-    void* chunk_buffer;
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(!chunk_buffer);
-  }
-
-  // Write the entire buffer. This will fail because a contigious buffer
-  // has not been set or allocated.
-  uint64_t write_offset = 0;
-  CHECK(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
-
-  // Attempt to allocate a chunk. This will fail because contigious
-  // ChunkedBuffer instances can not use the 'alloc_discrete' routine.
-  CHECK(!chunked_buffer.alloc_discrete(chunked_buffer.nchunks() / 2).ok());
-
-  // Set the contigious buffer.
-  CHECK(chunked_buffer.set_contigious(write_buffer).ok());
-  CHECK(chunked_buffer.set_size(buffer_size).ok());
-
-  // Verify all chunks are allocated and that they're addressed match
-  // 'write_buffer' to ensure 'write_buffer' was not copied.
-  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
-    uint32_t internal_size = 0;
-    CHECK(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
-    if (i < chunked_buffer.nchunks() - 1) {
-      CHECK(internal_size == chunk_size);
-    } else {
-      CHECK(internal_size == last_chunk_size);
-    }
-
-    void* chunk_buffer = nullptr;
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(chunk_buffer);
-    CHECK(
-        chunk_buffer ==
-        reinterpret_cast<char*>(write_buffer) + (i * chunk_size));
-  }
-
-  // Read the third element, this will be of value '2'.
-  uint64_t read_offset = 2 * sizeof(uint64_t);
-  uint64_t two = 0;
-  CHECK(chunked_buffer.read(&two, sizeof(uint64_t), read_offset).ok());
-  CHECK(two == 2);
-
-  // Read the 10th element, this will be of value '9'.
-  read_offset = 9 * sizeof(uint64_t);
-  uint64_t nine = 0;
-  CHECK(chunked_buffer.read(&nine, sizeof(uint64_t), read_offset).ok());
-  CHECK(nine == 9);
-
-  // Read the 100th element, this will be of value '99'.
-  read_offset = 99 * sizeof(uint64_t);
-  uint64_t ninety_nine = 0;
-  CHECK(chunked_buffer.read(&ninety_nine, sizeof(uint64_t), read_offset).ok());
-  CHECK(ninety_nine == 99);
-
-  // Overwrite the 100th element with value '900'.
-  write_offset = 99 * sizeof(uint64_t);
-  uint64_t nine_hundred = 900;
-  CHECK(
-      chunked_buffer.write(&nine_hundred, sizeof(uint64_t), write_offset).ok());
-
-  // Read the 100th element, this will be of value '900'.
-  read_offset = 99 * sizeof(uint64_t);
-  nine_hundred = 0;
-  CHECK(chunked_buffer.read(&nine_hundred, sizeof(uint64_t), read_offset).ok());
-  CHECK(nine_hundred == 900);
-
-  // Overwrite the 100th element back to value '99'.
-  write_offset = 99 * sizeof(uint64_t);
-  ninety_nine = 99;
-  CHECK(
-      chunked_buffer.write(&ninety_nine, sizeof(uint64_t), write_offset).ok());
-
-  // Read the entire written buffer.
-  uint64_t read_buffer[buffer_len];
-  read_offset = 0;
-  CHECK(chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
-  CHECK(memcmp(read_buffer, write_buffer, buffer_size) == 0);
-
-  // Clear the chunk buffer. This will not free the underlying buffer.
-  chunked_buffer.clear();
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == 0);
-}
-
-TEST_CASE(
-    "ChunkedBuffer: Test discrete, variable sized IO",
-    "[ChunkedBuffer][discrete_var_io]") {
-  // Instantiate a test ChunkedBuffer.
-  ChunkedBuffer chunked_buffer;
-
-  // Create a buffer to write to the test ChunkedBuffer.
-  const int64_t buffer_size = 1024 * 1024 * 3;
-  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
-  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
-  for (uint64_t i = 0; i < buffer_len; ++i) {
-    write_buffer[i] = i;
-  }
-
-  // Initialize the ChunkedBuffer with variable sized chunks.
-  CHECK(buffer_size % sizeof(uint64_t) == 0);
-  std::vector<uint32_t> var_chunk_sizes;
-  uint64_t remaining_bytes = buffer_size;
-  uint32_t chunk_size = sizeof(uint64_t);
-  while (remaining_bytes > 0) {
-    if (chunk_size > remaining_bytes) {
-      chunk_size = remaining_bytes;
-    }
-    var_chunk_sizes.emplace_back(chunk_size);
-    remaining_bytes -= chunk_size;
-    chunk_size += sizeof(uint64_t);
-  }
-  chunked_buffer.init_var_size(
-      ChunkedBuffer::BufferAddressing::DISCRETE,
-      std::vector<uint32_t>(var_chunk_sizes));
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.capacity() == buffer_size);
-  CHECK(chunked_buffer.nchunks() == var_chunk_sizes.size());
-
-  // Verify all chunks are unallocated.
-  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
-    void* chunk_buffer;
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(!chunk_buffer);
-  }
-
-  // Write the entire buffer. This will allocate all of the chunks.
-  uint64_t write_offset = 0;
-  CHECK(chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
-
-  // Verify all chunks are allocated and that they do not overlap
-  // 'buffer' because they have been deep-copied.
-  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
-    uint32_t internal_size = 0;
-    CHECK(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
-    CHECK(internal_size == var_chunk_sizes[i]);
-
-    void* chunk_buffer = nullptr;
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(chunk_buffer);
-    CHECK(chunk_buffer != write_buffer);
-    if (chunk_buffer < write_buffer) {
-      CHECK(
-          static_cast<char*>(chunk_buffer) + internal_size <=
-          reinterpret_cast<char*>(write_buffer));
-    } else {
-      CHECK(
-          reinterpret_cast<char*>(write_buffer) + buffer_size <=
-          static_cast<char*>(chunk_buffer));
-    }
-  }
-
-  // Read the third element, this will be of value '2'.
-  uint64_t read_offset = 2 * sizeof(uint64_t);
-  uint64_t two = 0;
-  CHECK(chunked_buffer.read(&two, sizeof(uint64_t), read_offset).ok());
-  CHECK(two == 2);
-
-  // Read the 10th element, this will be of value '9'.
-  read_offset = 9 * sizeof(uint64_t);
-  uint64_t nine = 0;
-  CHECK(chunked_buffer.read(&nine, sizeof(uint64_t), read_offset).ok());
-  CHECK(nine == 9);
-
-  // Read the 100th element, this will be of value '99'.
-  read_offset = 99 * sizeof(uint64_t);
-  uint64_t ninety_nine = 0;
-  CHECK(chunked_buffer.read(&ninety_nine, sizeof(uint64_t), read_offset).ok());
-  CHECK(ninety_nine == 99);
-
-  // Overwrite the 100th element with value '900'.
-  write_offset = 99 * sizeof(uint64_t);
-  uint64_t nine_hundred = 900;
-  CHECK(
-      chunked_buffer.write(&nine_hundred, sizeof(uint64_t), write_offset).ok());
-
-  // Read the 100th element, this will be of value '900'.
-  read_offset = 99 * sizeof(uint64_t);
-  nine_hundred = 0;
-  CHECK(chunked_buffer.read(&nine_hundred, sizeof(uint64_t), read_offset).ok());
-  CHECK(nine_hundred == 900);
-
-  // Overwrite the 100th element back to value '99'.
-  write_offset = 99 * sizeof(uint64_t);
-  ninety_nine = 99;
-  CHECK(
-      chunked_buffer.write(&ninety_nine, sizeof(uint64_t), write_offset).ok());
-
-  // Read the entire written buffer.
-  uint64_t read_buffer[buffer_len];
-  read_offset = 0;
-  CHECK(chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
-  CHECK(memcmp(read_buffer, write_buffer, buffer_size) == 0);
-
-  // Free the chunk buffer, which will free all of the allocated
-  // buffers and return chunked_buffer into an uninitialized state.
-  chunked_buffer.free();
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == 0);
-}
-
-TEST_CASE(
-    "ChunkedBuffer: Test contigious variable sized IO",
-    "[ChunkedBuffer][contigious_var_io]") {
-  // Instantiate a test ChunkedBuffer.
-  ChunkedBuffer chunked_buffer;
-
-  // Create a buffer to write to the test ChunkedBuffer.
-  const int64_t buffer_size = 1024 * 1024 * 3;
-  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
-  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
-  for (uint64_t i = 0; i < buffer_len; ++i) {
-    write_buffer[i] = i;
-  }
-
-  // Initialize the ChunkedBuffer with variable sized chunks.
-  CHECK(buffer_size % sizeof(uint64_t) == 0);
-  std::vector<uint32_t> var_chunk_sizes;
-  uint64_t remaining_bytes = buffer_size;
-  uint32_t chunk_size = sizeof(uint64_t);
-  while (remaining_bytes > 0) {
-    if (chunk_size > remaining_bytes) {
-      chunk_size = remaining_bytes;
-    }
-    var_chunk_sizes.emplace_back(chunk_size);
-    remaining_bytes -= chunk_size;
-    chunk_size += sizeof(uint64_t);
-  }
-  chunked_buffer.init_var_size(
-      ChunkedBuffer::BufferAddressing::CONTIGIOUS,
-      std::vector<uint32_t>(var_chunk_sizes));
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.capacity() == buffer_size);
-  CHECK(chunked_buffer.nchunks() == var_chunk_sizes.size());
-
-  // Verify all chunks are unallocated.
-  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
-    void* chunk_buffer;
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(!chunk_buffer);
-  }
-
-  // Write the entire buffer. This will fail because a contigious buffer
-  // has not been set or allocated.
-  uint64_t write_offset = 0;
-  CHECK(!chunked_buffer.write(write_buffer, buffer_size, write_offset).ok());
-
-  // Attempt to allocate a chunk. This will fail because contigious
-  // ChunkedBuffer instances can not use the 'alloc_discrete' routine.
-  CHECK(!chunked_buffer.alloc_discrete(chunked_buffer.nchunks() / 2).ok());
-
-  // Set the contigious buffer.
-  CHECK(chunked_buffer.set_contigious(write_buffer).ok());
-  CHECK(chunked_buffer.set_size(buffer_size).ok());
-
-  // Verify all chunks are allocated and that they're addressed match
-  // 'write_buffer' to ensure 'write_buffer' was not copied.
-  uint64_t offset = 0;
-  for (size_t i = 0; i < chunked_buffer.nchunks(); ++i) {
-    uint32_t internal_size = 0;
-    CHECK(chunked_buffer.internal_buffer_size(i, &internal_size).ok());
-    CHECK(internal_size == var_chunk_sizes[i]);
-
-    void* chunk_buffer = nullptr;
-    CHECK(chunked_buffer.internal_buffer(i, &chunk_buffer).ok());
-    CHECK(chunk_buffer);
-    CHECK(chunk_buffer == reinterpret_cast<char*>(write_buffer) + offset);
-    offset += internal_size;
-  }
-
-  // Read the third element, this will be of value '2'.
-  uint64_t read_offset = 2 * sizeof(uint64_t);
-  uint64_t two = 0;
-  CHECK(chunked_buffer.read(&two, sizeof(uint64_t), read_offset).ok());
-  CHECK(two == 2);
-
-  // Read the 10th element, this will be of value '9'.
-  read_offset = 9 * sizeof(uint64_t);
-  uint64_t nine = 0;
-  CHECK(chunked_buffer.read(&nine, sizeof(uint64_t), read_offset).ok());
-  CHECK(nine == 9);
-
-  // Read the 100th element, this will be of value '99'.
-  read_offset = 99 * sizeof(uint64_t);
-  uint64_t ninety_nine = 0;
-  CHECK(chunked_buffer.read(&ninety_nine, sizeof(uint64_t), read_offset).ok());
-  CHECK(ninety_nine == 99);
-
-  // Overwrite the 100th element with value '900'.
-  write_offset = 99 * sizeof(uint64_t);
-  uint64_t nine_hundred = 900;
-  CHECK(
-      chunked_buffer.write(&nine_hundred, sizeof(uint64_t), write_offset).ok());
-
-  // Read the 100th element, this will be of value '900'.
-  read_offset = 99 * sizeof(uint64_t);
-  nine_hundred = 0;
-  CHECK(chunked_buffer.read(&nine_hundred, sizeof(uint64_t), read_offset).ok());
-  CHECK(nine_hundred == 900);
-
-  // Overwrite the 100th element back to value '99'.
-  write_offset = 99 * sizeof(uint64_t);
-  ninety_nine = 99;
-  CHECK(
-      chunked_buffer.write(&ninety_nine, sizeof(uint64_t), write_offset).ok());
-
-  // Read the entire written buffer.
-  uint64_t read_buffer[buffer_len];
-  read_offset = 0;
-  CHECK(chunked_buffer.read(read_buffer, buffer_size, read_offset).ok());
-  CHECK(memcmp(read_buffer, write_buffer, buffer_size) == 0);
-
-  // Clear the chunk buffer. This will not free the underlying buffer.
-  chunked_buffer.clear();
-  CHECK(chunked_buffer.size() == 0);
-  CHECK(chunked_buffer.nchunks() == 0);
-}
-
-TEST_CASE(
-    "ChunkedBuffer: Test copy constructor",
-    "[ChunkedBuffer][copy_constructor]") {
-  // Instantiate the first test ChunkedBuffer.
-  ChunkedBuffer chunked_buffer1;
-
-  // Create a buffer to write to the test ChunkedBuffer.
-  const int64_t buffer_size = 1024 * 1024 * 3;
-  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
-  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
-  for (uint64_t i = 0; i < buffer_len; ++i) {
-    write_buffer[i] = i;
-  }
-
-  // Initialize the ChunkedBuffer.
-  CHECK(buffer_size % sizeof(uint64_t) == 0);
-  const size_t chunk_size = 1024 * 100;
-  CHECK(buffer_size % chunk_size != 0);
-  const size_t nchunks = (buffer_size / chunk_size) + 1;
-  const size_t last_chunk_size = buffer_size % chunk_size;
-  CHECK(chunk_size != last_chunk_size);
-  chunked_buffer1.init_fixed_size(
-      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
-  CHECK(chunked_buffer1.size() == 0);
-  CHECK(chunked_buffer1.capacity() == buffer_size);
-  CHECK(chunked_buffer1.nchunks() == nchunks);
-
-  // Write the entire buffer. This will allocate all of the chunks.
-  uint64_t write_offset = 0;
-  CHECK(chunked_buffer1.write(write_buffer, buffer_size, write_offset).ok());
-
-  // Instantiate a second test ChunkedBuffer with the copy constructor.
-  ChunkedBuffer chunked_buffer2(chunked_buffer1);
-
-  // Verify all public attributes are identical.
-  CHECK(chunked_buffer2.nchunks() == chunked_buffer1.nchunks());
-  CHECK(
-      chunked_buffer2.buffer_addressing() ==
-      chunked_buffer1.buffer_addressing());
-  CHECK(chunked_buffer2.capacity() == chunked_buffer1.capacity());
-  CHECK(chunked_buffer2.size() == chunked_buffer1.size());
-
-  // Read the entire written buffer from the second instance and verify
-  // the contents match the first instance.
-  uint64_t read_buffer[buffer_len];
-  uint64_t read_offset = 0;
-  CHECK(chunked_buffer2.read(read_buffer, buffer_size, read_offset).ok());
-  CHECK(memcmp(read_buffer, write_buffer, buffer_size) == 0);
-
-  // Ensure the internal data was deep-copied:
-  void* chunked_buffer1_chunk_0;
-  void* chunked_buffer2_chunk_0;
-  CHECK(chunked_buffer1.internal_buffer(0, &chunked_buffer1_chunk_0).ok());
-  CHECK(chunked_buffer2.internal_buffer(0, &chunked_buffer2_chunk_0).ok());
-  CHECK(chunked_buffer1_chunk_0 != chunked_buffer2_chunk_0);
-}
-
-TEST_CASE("ChunkedBuffer: Test assignment", "[ChunkedBuffer][assignment]") {
-  // Instantiate the first test ChunkedBuffer.
-  ChunkedBuffer chunked_buffer1;
-
-  // Create a buffer to write to the test ChunkedBuffer.
-  const int64_t buffer_size = 1024 * 1024 * 3;
-  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
-  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
-  for (uint64_t i = 0; i < buffer_len; ++i) {
-    write_buffer[i] = i;
-  }
-
-  // Initialize the ChunkedBuffer.
-  CHECK(buffer_size % sizeof(uint64_t) == 0);
-  const size_t chunk_size = 1024 * 100;
-  CHECK(buffer_size % chunk_size != 0);
-  const size_t nchunks = (buffer_size / chunk_size) + 1;
-  const size_t last_chunk_size = buffer_size % chunk_size;
-  CHECK(chunk_size != last_chunk_size);
-  chunked_buffer1.init_fixed_size(
-      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
-  CHECK(chunked_buffer1.size() == 0);
-  CHECK(chunked_buffer1.capacity() == buffer_size);
-  CHECK(chunked_buffer1.nchunks() == nchunks);
-
-  // Write the entire buffer. This will allocate all of the chunks.
-  uint64_t write_offset = 0;
-  CHECK(chunked_buffer1.write(write_buffer, buffer_size, write_offset).ok());
-
-  // Instantiate a second test ChunkedBuffer with the assignment operator.
-  ChunkedBuffer chunked_buffer2 = chunked_buffer1;
-
-  // Verify all public attributes are identical.
-  CHECK(chunked_buffer2.nchunks() == chunked_buffer1.nchunks());
-  CHECK(
-      chunked_buffer2.buffer_addressing() ==
-      chunked_buffer1.buffer_addressing());
-  CHECK(chunked_buffer2.capacity() == chunked_buffer1.capacity());
-  CHECK(chunked_buffer2.size() == chunked_buffer1.size());
-
-  // Read the entire written buffer from the second instance and verify
-  // the contents match the first instance.
-  uint64_t read_buffer[buffer_len];
-  uint64_t read_offset = 0;
-  CHECK(chunked_buffer2.read(read_buffer, buffer_size, read_offset).ok());
-  CHECK(memcmp(read_buffer, write_buffer, buffer_size) == 0);
-
-  // Ensure the internal data was deep-copied:
-  void* chunked_buffer1_chunk_0;
-  void* chunked_buffer2_chunk_0;
-  CHECK(chunked_buffer1.internal_buffer(0, &chunked_buffer1_chunk_0).ok());
-  CHECK(chunked_buffer2.internal_buffer(0, &chunked_buffer2_chunk_0).ok());
-  CHECK(chunked_buffer1_chunk_0 != chunked_buffer2_chunk_0);
-}
-
-TEST_CASE("ChunkedBuffer: Test shallow copy", "[ChunkedBuffer][shallow_copy]") {
-  // Instantiate the first test ChunkedBuffer.
-  ChunkedBuffer chunked_buffer1;
-
-  // Create a buffer to write to the test ChunkedBuffer.
-  const int64_t buffer_size = 1024 * 1024 * 3;
-  uint64_t* const write_buffer = static_cast<uint64_t*>(malloc(buffer_size));
-  const uint64_t buffer_len = buffer_size / sizeof(uint64_t);
-  for (uint64_t i = 0; i < buffer_len; ++i) {
-    write_buffer[i] = i;
-  }
-
-  // Initialize the ChunkedBuffer.
-  CHECK(buffer_size % sizeof(uint64_t) == 0);
-  const size_t chunk_size = 1024 * 100;
-  CHECK(buffer_size % chunk_size != 0);
-  const size_t nchunks = (buffer_size / chunk_size) + 1;
-  const size_t last_chunk_size = buffer_size % chunk_size;
-  CHECK(chunk_size != last_chunk_size);
-  chunked_buffer1.init_fixed_size(
-      ChunkedBuffer::BufferAddressing::DISCRETE, buffer_size, chunk_size);
-  CHECK(chunked_buffer1.size() == 0);
-  CHECK(chunked_buffer1.capacity() == buffer_size);
-  CHECK(chunked_buffer1.nchunks() == nchunks);
-
-  // Write the entire buffer. This will allocate all of the chunks.
-  uint64_t write_offset = 0;
-  CHECK(chunked_buffer1.write(write_buffer, buffer_size, write_offset).ok());
-
-  // Instantiate a second test ChunkedBuffer with the shallow_copy routine.
-  ChunkedBuffer chunked_buffer2 = chunked_buffer1.shallow_copy();
-
-  // Verify all public attributes are identical.
-  CHECK(chunked_buffer2.nchunks() == chunked_buffer1.nchunks());
-  CHECK(
-      chunked_buffer2.buffer_addressing() ==
-      chunked_buffer1.buffer_addressing());
-  CHECK(chunked_buffer2.capacity() == chunked_buffer1.capacity());
-  CHECK(chunked_buffer2.size() == chunked_buffer1.size());
-
-  // Read the entire written buffer from the second instance and verify
-  // the contents match the first instance.
-  uint64_t read_buffer[buffer_len];
-  uint64_t read_offset = 0;
-  CHECK(chunked_buffer2.read(read_buffer, buffer_size, read_offset).ok());
-  CHECK(memcmp(read_buffer, write_buffer, buffer_size) == 0);
-
-  // Ensure the internal data was shallow-copied:
-  void* chunked_buffer1_chunk_0;
-  void* chunked_buffer2_chunk_0;
-  CHECK(chunked_buffer1.internal_buffer(0, &chunked_buffer1_chunk_0).ok());
-  CHECK(chunked_buffer2.internal_buffer(0, &chunked_buffer2_chunk_0).ok());
-  CHECK(chunked_buffer1_chunk_0 == chunked_buffer2_chunk_0);
+  std::cerr << "JOE 38" << std::endl;
 }
